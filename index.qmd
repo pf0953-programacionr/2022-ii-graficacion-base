@@ -1,0 +1,597 @@
+---
+title: "Visualización de datos con funciones de graficación del paquete base de R"
+format: 
+  html:
+    toc: true
+    code-fold: false
+---
+
+## Presentación
+Este documento presenta varios gráficos estadísticos generados con funciones del paquete base del lenguaje de programación [R](https://www.r-project.org/).
+
+Tanto los datos como el código fuente están disponibles en [https://github.com/pf0953-programacionr/2022-ii-graficacion-base](https://github.com/pf0953-programacionr/2022-ii-graficacion-base).
+
+## Opciones generales de la sesión R
+Se evita el uso de notación científica en gráficos y otras salidas, excepto en números de más de siete dígitos. Para esto, se emplea la función [options()](https://rdrr.io/r/base/options.html) y su argumento `scipen`.
+
+```{r}
+#| label: opciones-generales
+
+# Se le da preferencia a la notación fija (sobre la científica) a menos que el número tenga más de siete dígitos
+options(scipen = 7)
+```
+
+## Conjuntos de datos
+
+### Casos de COVID-19 en Costa Rica
+Estos datos son publicados por el Ministerio de Salud de Costa Rica en [https://geovision.uned.ac.cr/oges/](https://geovision.uned.ac.cr/oges/). Se distribuyen en archivos CSV, incluyendo un archivo de datos generales para todo el país y varios archivos con datos por cantón. La fecha de la última actualización es 2022-05-30.
+
+#### Datos generales
+Es un archivo que contiene una fila por día y varias columnas con cantidades de casos (positivos, fallecidos, en salón, en UCI, etc.).
+
+##### Carga de datos
+Se cargan en un dataframe de R con la función [read.csv()](https://rdrr.io/r/utils/read.table.html).
+
+```{r}
+#| label: carga-datos-covid-generales
+
+# Carga del archivo CSV de entrada en un dataframe
+covid_general<- read.csv("datos/05_30_22_CSV_GENERAL.csv", sep = ";")
+```
+
+##### Estructura del conjunto de datos
+Se despliegan las columnas del conjunto de datos y sus tipos con la función [str()](https://rdrr.io/r/utils/str.html).
+
+```{r}
+#| label: estructura-datos-covid-generales
+
+# Estructura del dataframe
+str(covid_general)
+```
+
+##### Muestra de los datos
+Con la notación de paréntesis cuadrados (`[]`), se despliegan las 10 primeras filas (observaciones) y algunas columnas (variables) de interés.
+
+```{r}
+#| label: muestra-datos-covid-generales
+
+# Despliegue de las 10 primeras filas y algunas columnas de interés
+covid_general[1:10, c("FECHA",
+              "positivos",
+              "activos",
+              "RECUPERADOS",
+              "nue_posi",
+              "nue_falleci",
+              "fallecidos",
+              "salon",
+              "UCI")]
+```
+
+##### Reducción de columnas
+Se limita el conjunto de datos a las columnas que son de interés para el análisis.
+
+```{r}
+#| label: reduccion-columnas-covid-generales
+
+# Selección de columnas de interés para el análisis
+covid_general<-
+  covid_general[, c("FECHA",
+            "positivos",
+            "activos",
+            "RECUPERADOS",
+            "fallecidos",
+            "nue_posi",
+            "nue_falleci",
+            "salon",
+            "UCI")]
+```
+
+##### Cambio de nombres y de tipos de datos de las columnas
+Todos los nombres de las columnas se cambian a minúsculas con la función [colnames()](https://rdrr.io/r/base/colnames.html), para así tener un estilo consistente. Además, el tipo de la columna `fecha` se convierte de `str` a `Date`.
+
+```{r}
+#| label: renombramiento-conversion-columnas-covid-generales
+
+# Cambio de nombres de las columnas
+colnames(covid_general) <-
+  c("fecha",
+    "positivos",
+    "activos",
+    "recuperados",
+    "fallecidos",
+    "nuevos_positivos",
+    "nuevos_fallecidos",
+    "salon",
+    "uci")
+
+# Conversión de str a Date de la columna fecha
+covid_general$fecha <- as.Date(covid_general$fecha, format = "%d/%m/%Y")
+
+# Despliegue de las últimas 10 observaciones
+tail(covid_general, n = 10)
+```
+
+#### Datos cantonales
+Son cuatro archivos con casos positivos, activos, recuperados y fallecidos. Cada archivo tiene una fila para cada uno de los 82 cantones y una fila adicional para "Otros". Hay una columna por cada día muestreado, con la cantidad de casos del tipo respectivo.
+
+##### Carga de datos
+
+```{r}
+#| label: carga-datos-covid-cantonales
+
+# Carga de casos positivos
+covid_cantonal_positivos <-
+  read.csv("datos/05_30_22_CSV_POSITIVOS.csv",
+           sep = ";",
+           fileEncoding = "iso-8859-1")
+
+# Carga de casos activos
+covid_cantonal_activos <-
+  read.csv("datos/05_30_22_CSV_ACTIVOS.csv",
+           sep = ";",
+           fileEncoding = "iso-8859-1")
+
+# Carga de casos recuperados
+covid_cantonal_recuperados <-
+  read.csv("datos/05_30_22_CSV_RECUP.csv",
+           sep = ";",
+           fileEncoding = "iso-8859-1")
+
+# Carga de casos fallecidos
+covid_cantonal_fallecidos <-
+  read.csv("datos/05_30_22_CSV_FALLECIDOS.csv",
+           sep = ";",
+           fileEncoding = "iso-8859-1")
+```
+
+##### Estructura del conjunto de datos
+
+```{r}
+#| label: estructura-datos-covid-cantonales
+
+# Estructura del dataframe
+str(covid_cantonal_positivos)
+```
+
+##### Muestra de los datos
+
+```{r}
+#| label: muestra-datos-covid-cantonales
+
+# Despliegue de las 10 primeras filas y algunas columnas de interés
+covid_cantonal_positivos[1:10, c("provincia",
+                                 "canton",
+                                 "X30.05.2022")]
+```
+
+##### Reducción de columnas
+
+```{r}
+#| label: reduccion-columnas-covid-cantonales
+
+# Selección de columnas de interés para el análisis
+
+covid_cantonal_positivos <-
+  covid_cantonal_positivos[, c("provincia",
+                               "canton",
+                               "X30.05.2022")]
+
+covid_cantonal_activos <-
+  covid_cantonal_activos[, c("provincia",
+                             "canton",
+                             "X30.05.2022")]
+
+covid_cantonal_recuperados <-
+  covid_cantonal_recuperados[, c("provincia",
+                                 "canton",
+                                 "X30.05.2022")]
+
+covid_cantonal_fallecidos <-
+  covid_cantonal_fallecidos[, c("provincia",
+                                "canton",
+                                "X30.05.2022")]
+```
+
+##### Cambio de nombre de columnas y eliminación de filas innecesarias
+
+```{r}
+#| label: renombramiento-conversion-columnas-covid-cantonales
+
+# Eliminación de filas con valores nulos
+covid_cantonal_positivos <-
+  covid_cantonal_positivos[!is.na(covid_cantonal_positivos$X30.05.2022),]
+covid_cantonal_activos <-
+  covid_cantonal_activos[!is.na(covid_cantonal_activos$X30.05.2022),]
+covid_cantonal_recuperados <-
+  covid_cantonal_recuperados[!is.na(covid_cantonal_recuperados$X30.05.2022),]
+covid_cantonal_fallecidos <-
+  covid_cantonal_fallecidos[!is.na(covid_cantonal_fallecidos$X30.05.2022),]
+
+# Eliminación de fila con canton=="Otros"
+covid_cantonal_positivos <-
+  covid_cantonal_positivos[covid_cantonal_positivos$canton != "Otros",]
+covid_cantonal_activos <-
+  covid_cantonal_activos[covid_cantonal_activos$canton != "Otros",]
+covid_cantonal_recuperados <-
+  covid_cantonal_recuperados[covid_cantonal_recuperados$canton != "Otros",]
+covid_cantonal_fallecidos <-
+  covid_cantonal_fallecidos[covid_cantonal_fallecidos$canton != "Otros",]
+
+# Cambio de nombre de columnas
+colnames(covid_cantonal_positivos) <-
+  c("provincia",
+    "canton",
+    "positivos")
+colnames(covid_cantonal_activos) <-
+  c("provincia",
+    "canton",
+    "activos")
+colnames(covid_cantonal_recuperados) <-
+  c("provincia",
+    "canton",
+    "recuperados")
+colnames(covid_cantonal_fallecidos) <-
+  c("provincia",
+    "canton",
+    "fallecidos")
+
+# Despliegue de las últimas 10 observaciones
+tail(covid_cantonal_positivos, n = 10)
+```
+
+### Pasajeros del Titanic
+Este es el conjunto de datos de entrenamiento de la competencia [Titanic - Machine Learning from Disaster](https://www.kaggle.com/c/titanic/overview) organizada por [Kaggle](https://www.kaggle.com/). El archivo también está disponible en [https://github.com/pf3311-cienciadatosgeoespaciales/2021-iii/blob/main/contenido/b/datos/entrenamiento.csv](https://github.com/pf3311-cienciadatosgeoespaciales/2021-iii/blob/main/contenido/b/datos/entrenamiento.csv).
+
+#### Carga de datos
+
+```{r}
+#| label: carga-datos-titanic
+
+# Pasajeros en el conjunto de datos de entrenamiento
+titanic <- read.csv("datos/pasajeros-titanic-entrenamiento.csv")
+```
+
+##### Estructura del conjunto de datos
+
+```{r}
+#| label: estructura-datos-titanic
+
+# Estructura del dataframe
+str(titanic)
+```
+
+##### Muestra de los datos
+
+```{r}
+#| label: muestra-datos-titanic
+
+# Despliegue de las 10 primeras filas y algunas columnas de interés
+titanic[1:10, c("Survived", "Pclass", "Sex", "Age", "SibSp", "Parch")]
+```
+
+## Visualizaciones de datos
+Las siguientes visualizaciones se implementan con funciones de graficación del paquete base de R.
+
+### Histogramas
+Un [histograma](https://es.wikipedia.org/wiki/Histograma) es una representación gráfica de la distribución de una variable numérica en forma de barras (llamadas en inglés *bins*). La longitud de cada barra representa la frecuencia de un rango de valores de la variable. La graficación de la distribución de las variables es, frecuentemente, una de las primeras tareas que se realiza cuando se explora un conjunto de datos.
+
+En el paquete base de R, los histogramas se crean la función [hist()](https://rdrr.io/r/graphics/hist.html).
+
+El siguiente histograma muestra la distribución de la variable correspondiente a los casos de COVID positivos en los cantones de Costa Rica.
+
+```{r}
+#| label: histograma-covid-cantonal-positivos
+#| code-fold: true
+
+# Histograma de casos positivos en cantones
+hist(
+  covid_cantonal_positivos$positivos,
+  breaks = 8,
+  col = "blue",
+  main = "Distribución de casos positivos de COVID en cantones al 2022-05-30",
+  xlab = "Casos",
+  ylab = "Frecuencia"
+)
+```
+
+La función [density()](https://rdrr.io/r/stats/density.html) permite crear una estimación de densidad del kernel (*Kernel Density Estimation*, KDE), una curva que muestra la densidad de los datos.
+
+```{r}
+#| label: histograma-density-covid-cantonal-positivos
+#| code-fold: true
+
+# Histograma de casos positivos en cantones
+hist(
+  x = covid_cantonal_positivos$positivos,
+  breaks = 8,
+  col = "blue",
+  prob = TRUE,
+  main = "Distribución de casos positivos de COVID en cantones al 2022-05-30",
+  xlab = "Casos",
+  ylab = "Densidad"
+)
+
+# Curva de densidad
+lines(density(covid_cantonal_positivos$positivos), lwd = 3, col = "black")
+```
+
+#### Ejercicios
+
+1. Construya un histograma que muestre la distribución de la edad de los pasajeros del Titanic. Incluya una curva de densidad.
+2. Construya un histograma que muestre la distribución de la cantidad de padres e hijos que viajaban con los pasajeros del Titanic. Incluya una curva de densidad.
+3. Construya un histograma que muestre la distribución de la cantidad de hermanos y cónyugues que viajaban con los pasajeros del Titanic. Incluya una curva de densidad.
+
+### Gráficos de caja
+Un [gráfico de caja (*boxplot*)](https://es.wikipedia.org/wiki/Diagrama_de_caja) muestra información de una variable numérica a través de su [mediana](https://es.wikipedia.org/wiki/Mediana), sus [cuartiles](https://es.wikipedia.org/wiki/Cuartiles) (Q1, Q2 y Q3) y sus [valores atípicos](https://es.wikipedia.org/wiki/Valor_at%C3%ADpico).
+
+En el paquete base de R, los gráficos de caja se crean la función [boxplot()](https://rdrr.io/r/graphics/boxplot.html).
+
+El siguiente gráfico de caja muestra la distribución de la variable correspondiente a los casos de COVID fallecidos en los cantones de Costa Rica.
+
+```{r}
+#| label: grafico-caja-covid-cantonal-fallecidos
+#| code-fold: true
+
+# Gráfico de caja
+boxplot(
+  x = covid_cantonal_fallecidos$fallecidos,
+  main = "Distribución de casos fallecidos de COVID en cantones al 2022-05-30",
+  ylab = "Casos"
+)
+```
+
+La distribución de la misma variable se muestra en el siguiente gráfico, pero agrupada por provincias.
+
+```{r}
+#| label: grafico-caja-covid-cantonal-fallecidos-provincias
+#| code-fold: true
+
+# Gráfico de caja
+boxplot(
+  fallecidos ~ provincia,
+  data = covid_cantonal_fallecidos,
+  main = "Distribución de casos fallecidos de COVID en provincias al 2022-05-30",
+  ylab = "Casos",
+  cex.axis = 0.75
+)
+```
+
+#### Ejercicios
+1. Construya un gráfico de caja de la edad de los pasajeros del Titanic.
+2. Agregue la distribución de la variable de sobrevivencia al gráfico del ejercicio anterior.
+3. Construya un gráfico de caja de la cantidad de padres e hijos que viajaban con los pasajeros del Titanic.
+4. Agregue la distribución de la variable de sobrevivencia al gráfico del ejercicio anterior.
+5. Construya un gráfico de caja de la cantidad de hermanos y cónyugues que viajaban con los pasajeros del Titanic.
+6. Agregue la distribución de la variable de sobrevivencia al gráfico del ejercicio anterior.
+
+### Gráficos de barras
+Un [gráfico de barras](https://es.wikipedia.org/wiki/Diagrama_de_barras) se compone de barras rectangulares con longitud proporcional a estadísticas (ej. frecuencias, promedios, mínimos, máximos) asociadas a una variable categórica o discreta. Las barras pueden ser horizontales o verticales y se recomienda que estén ordenadas según su longitud, a menos que exista un orden inherente a la variable (ej. el orden de los días de la semana).
+
+El paquete base de R implementa gráficos de barras con la función [barplot()](https://rdrr.io/r/graphics/barplot.html).
+
+Los siguientes gráficos de barras muestran la cantidad diaria de nuevos casos positivos y nuevos casos fallecidos.
+
+```{r}
+#| label: grafico-barras-positivos
+#| code-fold: true
+
+# Gráfico de barras
+barplot(
+  height=covid_general$nuevos_positivos,
+  names.arg=format(covid_general$fecha, "%Y"),
+  bty = "n", 
+  tck = 0, 
+  xaxt = "n",
+  space = 1,
+  main="Casos positivos por día",
+  xlab = "Fecha",
+  ylab = "Casos positivos"
+)
+
+# Fechas minima y máxima
+x_min <- min(covid_general$fecha)
+x_max <- max(covid_general$fecha)
+
+# Formato del eje X
+axis(
+  side = 1,
+  at = match(seq(as.Date(x_min), x_max, "years"), covid_general$fecha) * (1 + 1),
+  labels = format(seq(as.Date(x_min), x_max, "years"), "%Y"),
+  lwd = 0)
+```
+
+```{r}
+#| label: grafico-barras-fallecidos
+#| code-fold: true
+
+# Gráfico de barras
+barplot(
+  height=covid_general$nuevos_fallecidos,
+  names.arg=format(covid_general$fecha, "%Y"),
+  bty = "n", 
+  tck = 0, 
+  xaxt = "n",
+  space = 1,
+  main="Casos fallecidos por día",
+  xlab = "Fecha",
+  ylab = "Casos fallecidos"
+)
+
+# Fechas minima y máxima
+x_min <- min(covid_general$fecha)
+x_max <- max(covid_general$fecha)
+
+# Formato del eje X
+axis(
+  side = 1,
+  at = match(seq(as.Date(x_min), x_max, "years"), covid_general$fecha) * (1 + 1),
+  labels = format(seq(as.Date(x_min), x_max, "years"), "%Y"),
+  lwd = 0)
+```
+
+El siguiente gráfico muestra la cantidad de casos positivos agrupados por provincia.
+
+```{r}
+#| label: grafico-barras-covid-positivos-cantones
+#| code-fold: true
+
+# Agrupación de casos por provincia
+positivos_cantones_x_provincia <-
+  aggregate(data = covid_cantonal_positivos,
+            positivos ~ provincia,
+            FUN = sum,
+            na.rm = TRUE)
+
+# Ordenamiento
+positivos_cantones_x_provincia <-
+  positivos_cantones_x_provincia[order(-positivos_cantones_x_provincia$positivos),]
+
+# Gráfico de barras
+barplot(
+  height = positivos_cantones_x_provincia$positivos,
+  names.arg = positivos_cantones_x_provincia$provincia,
+  main = "Casos positivos por provincia",
+  xlab = "Provincia",
+  ylab = "Casos positivos",
+  cex.axis = 0.5, 
+  col = "blue"
+)
+```
+
+#### Ejercicios
+1. Construya un gráfico de barras que muestre la cantidad de pasajeros del Titanic por sexo.
+2. Construya un gráfico de barras que muestre la cantidad de pasajeros del Titanic por clase.
+3. Construya un gráfico de barras que muestre la cantidad de pasajeros del Titanic que sobrevivieron y que fallecieron.
+
+### Gráficos de dispersión
+Un [gráfico de dispersión (*scatterplot*)](https://es.wikipedia.org/wiki/Diagrama_de_dispersi%C3%B3n) despliega los valores de dos variables numéricas, como puntos en un sistema de coordenadas. El valor de una variable se despliega en el eje X y el de la otra variable en el eje Y. Variables adicionales pueden ser mostradas mediante atributos de los puntos, tales como su tamaño, color o forma.
+
+El paquete base de R implementa gráficos de dispersión por medio de la función [plot()](https://rdrr.io/r/base/plot.html).
+
+Seguidamente, se utiliza un gráfico de dispersión para mostrar las cantidades diarias de pacientes hospitalizados en salón y de pacientes hospitalizados en unidades de cuidados intensivos (UCI) por causa del COVID. 
+
+```{r}
+#| label: grafico-dispersion-salon-uci
+#| code-fold: true
+
+# Gráfico de dispersión
+plot(
+  x = covid_general$salon,
+  y = covid_general$uci,
+  pch = 16,  # https://www.r-bloggers.com/2021/06/r-plot-pch-symbols-different-point-shapes-in-r/
+  col = factor(format(covid_general$fecha, "%Y")),  # color de los puntos con base en el año
+  main = "Pacientes en salón vs pacientes en UCI al 2020-05-30",
+  xlab = "Pacientes hospitalizados en salón",
+  ylab = "Pacientes hospitalizados en UCI"
+)
+
+# Leyenda
+legend(
+  x = "topleft",
+  inset = 0.03,
+  pch = 16,
+  legend = levels(factor(format(covid_general$fecha, "%Y"))),
+  col = seq_along(factor(format(covid_general$fecha, "%Y")))
+)
+```
+
+#### Ejercicios
+1. En un gráfico de dispersión, muestre las variables de casos positivos y casos fallecidos de COVID, del conjunto de datos generales.
+
+### Gráficos de líneas
+Un [gráfico de líneas](https://en.wikipedia.org/wiki/Line_chart) muestra información en la forma de puntos de datos, llamados marcadores (*markers*), conectados por segmentos de líneas rectas. Es similar a un gráfico de dispersión pero, además de los segmentos de línea, tiene la particularidad de que los datos están ordenados, usualmente con respecto al eje X. Los gráficos de línea son usados frecuentemente para mostrar tendencias a través del tiempo.
+
+El paquete base de R implementa gráficos de dispersión por medio de la función `plot()` y su argumento `type=l`.
+
+El siguiente gráfico de líneas muestra la cantidad de casos positivos de COVID acumulados a través del tiempo.
+
+```{r}
+#| label: grafico-lineas-positivos
+#| code-fold: true
+
+# Gráfico de líneas
+plot(
+  covid_general$fecha,
+  covid_general$positivos,
+  type = "l",
+  xaxt = "n",
+  yaxt = "n",
+  main = "Casos positivos acumulados de COVID en Costa Rica al 2020-05-30",
+  xlab = "Fecha",
+  ylab = "Casos positivos",
+  col = "blue"
+)
+
+# Formato del eje X
+axis(side = 1,
+     covid_general$fecha,
+     tick = FALSE,
+     format(covid_general$fecha, "%m-%y"),
+     cex.axis = .7)
+
+# Formato del eje Y
+axis(
+  side = 2,
+  covid_general$positivos,
+  labels = TRUE,  
+  at = seq(0, 1000000, by = 200000),
+  cex.axis = .7
+)
+```
+
+En el siguiente caso, se presenta un gráfico de líneas para múltiples variables: casos positivos, activos, recuperados y fallecidos.
+
+```{r}
+#| label: grafico-lineas-positivos-activos-recuperados-fallecidos
+#| code-fold: true
+
+# Gráfico de líneas de casos positivos
+plot(
+  covid_general$fecha,
+  covid_general$positivos,
+  type = "l",
+  xaxt = "n",
+  yaxt = "n",
+  main = "Casos acumulados de COVID en Costa Rica",
+  xlab = "Fecha",
+  ylab = "Casos",
+  col = "blue"
+)
+
+# Casos activos
+lines(covid_general$fecha, covid_general$activos, col="red")
+
+# Casos recuperados
+lines(covid_general$fecha, covid_general$recuperados, col="green")
+
+# Casos fallecidos
+lines(covid_general$fecha, covid_general$fallecidos, col="black")
+
+# Leyenda
+legend(
+  x = "topleft",
+  inset = 0.03,
+  legend = c("Positivos", "Activos", "Recuperados", "Fallecidos"),
+  col = c("blue", "red", "green", "black"),
+  lty = 1,
+  cex = 0.7)
+
+# Formato del eje X
+axis(side = 1,
+     covid_general$fecha,
+     tick = FALSE,
+     format(covid_general$fecha, "%m-%y"),
+     cex.axis = .7)
+
+# Formato del eje Y
+axis(
+  side = 2,
+  covid_general$positivos,
+  labels = TRUE,  
+  at = seq(0, 1000000, by = 200000),
+  cex.axis = .7
+)
+```
+
+#### Ejercicios
+1. En un gráfico de líneas, muestre las variables de casos positivos de hombres y de casos positivos de mujeres, del conjunto de datos generales de COVID.

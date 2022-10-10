@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Visualización de datos con funciones de graficación del paquete base de R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#presentación" id="toc-presentación" class="nav-link active" data-scroll-target="#presentación">Presentación</a></li>
+  <li><a href="#opciones-generales-de-la-sesión-r" id="toc-opciones-generales-de-la-sesión-r" class="nav-link" data-scroll-target="#opciones-generales-de-la-sesión-r">Opciones generales de la sesión R</a></li>
+  <li><a href="#conjuntos-de-datos" id="toc-conjuntos-de-datos" class="nav-link" data-scroll-target="#conjuntos-de-datos">Conjuntos de datos</a>
+  <ul class="collapse">
+  <li><a href="#casos-de-covid-19-en-costa-rica" id="toc-casos-de-covid-19-en-costa-rica" class="nav-link" data-scroll-target="#casos-de-covid-19-en-costa-rica">Casos de COVID-19 en Costa Rica</a></li>
+  <li><a href="#pasajeros-del-titanic" id="toc-pasajeros-del-titanic" class="nav-link" data-scroll-target="#pasajeros-del-titanic">Pasajeros del Titanic</a></li>
+  </ul></li>
+  <li><a href="#visualizaciones-de-datos" id="toc-visualizaciones-de-datos" class="nav-link" data-scroll-target="#visualizaciones-de-datos">Visualizaciones de datos</a>
+  <ul class="collapse">
+  <li><a href="#histogramas" id="toc-histogramas" class="nav-link" data-scroll-target="#histogramas">Histogramas</a></li>
+  <li><a href="#gráficos-de-caja" id="toc-gráficos-de-caja" class="nav-link" data-scroll-target="#gráficos-de-caja">Gráficos de caja</a></li>
+  <li><a href="#gráficos-de-barras" id="toc-gráficos-de-barras" class="nav-link" data-scroll-target="#gráficos-de-barras">Gráficos de barras</a></li>
+  <li><a href="#gráficos-de-dispersión" id="toc-gráficos-de-dispersión" class="nav-link" data-scroll-target="#gráficos-de-dispersión">Gráficos de dispersión</a></li>
+  <li><a href="#gráficos-de-líneas" id="toc-gráficos-de-líneas" class="nav-link" data-scroll-target="#gráficos-de-líneas">Gráficos de líneas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Visualización de datos con funciones de graficación del paquete base de R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="presentación" class="level2">
+<h2 class="anchored" data-anchor-id="presentación">Presentación</h2>
+<p>Este documento presenta varios gráficos estadísticos generados con funciones del paquete base del lenguaje de programación <a href="https://www.r-project.org/">R</a>.</p>
+<p>Tanto los datos como el código fuente están disponibles en <a href="https://github.com/pf0953-programacionr/2022-ii-graficacion-base">https://github.com/pf0953-programacionr/2022-ii-graficacion-base</a>.</p>
+</section>
+<section id="opciones-generales-de-la-sesión-r" class="level2">
+<h2 class="anchored" data-anchor-id="opciones-generales-de-la-sesión-r">Opciones generales de la sesión R</h2>
+<p>Se evita el uso de notación científica en gráficos y otras salidas, excepto en números de más de siete dígitos. Para esto, se emplea la función <a href="https://rdrr.io/r/base/options.html">options()</a> y su argumento <code>scipen</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Se le da preferencia a la notación fija (sobre la científica) a menos que el número tenga más de siete dígitos</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="conjuntos-de-datos" class="level2">
+<h2 class="anchored" data-anchor-id="conjuntos-de-datos">Conjuntos de datos</h2>
+<section id="casos-de-covid-19-en-costa-rica" class="level3">
+<h3 class="anchored" data-anchor-id="casos-de-covid-19-en-costa-rica">Casos de COVID-19 en Costa Rica</h3>
+<p>Estos datos son publicados por el Ministerio de Salud de Costa Rica en <a href="https://geovision.uned.ac.cr/oges/">https://geovision.uned.ac.cr/oges/</a>. Se distribuyen en archivos CSV, incluyendo un archivo de datos generales para todo el país y varios archivos con datos por cantón. La fecha de la última actualización es 2022-05-30.</p>
+<section id="datos-generales" class="level4">
+<h4 class="anchored" data-anchor-id="datos-generales">Datos generales</h4>
+<p>Es un archivo que contiene una fila por día y varias columnas con cantidades de casos (positivos, fallecidos, en salón, en UCI, etc.).</p>
+<section id="carga-de-datos" class="level5">
+<h5 class="anchored" data-anchor-id="carga-de-datos">Carga de datos</h5>
+<p>Se cargan en un dataframe de R con la función <a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga del archivo CSV de entrada en un dataframe</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>covid_general<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos/05_30_22_CSV_GENERAL.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="estructura-del-conjunto-de-datos" class="level5">
+<h5 class="anchored" data-anchor-id="estructura-del-conjunto-de-datos">Estructura del conjunto de datos</h5>
+<p>Se despliegan las columnas del conjunto de datos y sus tipos con la función <a href="https://rdrr.io/r/utils/str.html">str()</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estructura del dataframe</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(covid_general)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   816 obs. of  144 variables:
+ $ FECHA         : chr  "06/03/2020" "07/03/2020" "08/03/2020" "09/03/2020" ...
+ $ SE            : int  10 10 11 11 11 11 11 11 11 12 ...
+ $ positivos     : int  2 7 10 12 13 22 23 26 27 35 ...
+ $ nue_posi      : int  2 5 3 2 1 9 1 3 1 8 ...
+ $ conf_lab      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ conf_nexo     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ muj_posi      : int  NA NA NA NA 7 14 14 14 15 19 ...
+ $ hom_posi      : int  NA NA NA NA 6 8 9 12 12 16 ...
+ $ extranj_posi  : int  NA NA NA NA 3 3 3 3 4 5 ...
+ $ costar_posi   : int  NA NA NA NA 10 19 20 23 23 30 ...
+ $ investig_posi : int  NA NA NA NA 0 0 0 0 0 0 ...
+ $ adul_posi     : int  NA NA NA NA 9 18 19 21 22 28 ...
+ $ am_posi       : int  NA NA NA NA 2 2 2 3 3 3 ...
+ $ menor_posi    : int  NA NA NA NA 2 2 2 2 2 4 ...
+ $ eda_ignor_posi: int  NA NA NA NA NA NA NA NA NA NA ...
+ $ edmin_posi    : chr  "" "" "" "" ...
+ $ edmax_posi    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ promedio_posi : chr  "" "" "" "" ...
+ $ descartados   : chr  "" "" "" "" ...
+ $ nue_descar    : chr  "" "" "" "" ...
+ $ fallecidos    : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ nue_falleci   : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ muj_fall      : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ hom_fall      : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ emin_fall     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ emax_fall     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ promedio_fall : chr  "" "" "" "" ...
+ $ adul_fall     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ am_fall       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ menor_fall    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ eda_igno_falle: int  NA NA NA NA NA NA NA NA NA NA ...
+ $ hospital      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ nue_hospi     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ salon         : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ nue_salon     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ UCI           : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ nue_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ emin_UCI      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ emax_UCI      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ promedio_UCI  : chr  "" "" "" "" ...
+ $ RECUPERADOS   : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ NUE_RECUP     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ MUJ_RECUP     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HOM_RECUP     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ ADUL_RECUP    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ AM_RECUP      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ MENOR_RECUP   : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ EDA_IGNO_RECUP: int  NA NA NA NA NA NA NA NA NA NA ...
+ $ PROMEDIO_RECUP: chr  "" "" "" "" ...
+ $ EDMIN_RECUP   : chr  "" "" "" "" ...
+ $ EDMAX_RECUP   : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Muestras      : chr  "" "" "" "" ...
+ $ MUEST_NEW     : chr  "" "" "" "" ...
+ $ DIA_COVID19   : int  0 1 2 3 4 5 6 7 8 9 ...
+ $ afec_posi     : int  NA NA NA NA NA NA NA NA NA 16 ...
+ $ afec_recu     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ afec_fall     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ activos       : int  2 7 10 12 13 22 23 26 27 35 ...
+ $ nue_acti      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ muj_acti      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ hom_acti      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ adul_acti     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ am_acti       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ menor_acti    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ eda_igno_acti : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ edmin_acti    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ edmax_acti    : chr  "" "" "" "" ...
+ $ promedio_acti : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ letalidad     : chr  "0,00" "0,00" "0,00" "0,00" ...
+ $ por_recup     : chr  "0,00" "0,00" "0,00" "0,00" ...
+ $ por_activ     : chr  "100,00" "100,00" "100,00" "100,00" ...
+ $ transpor      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HSJD_UCI      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HSJD_SALON    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ CEACO_UCI     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ CEACO_SALON   : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HCG_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HCG_SALON     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HMEX_UCI      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HMEX_SALON    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HNN_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HNN_SALON     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HEB_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HEB_SALON     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HTF_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HTF_SALON     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HLA_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HLA_SALON     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HNPSI_UCI     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HNPSI_SALON   : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HSRA_UCI      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HSRA_SALON    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HDGR_UCI      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HDGR_SALON    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HDSC_UCI      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HDSC_SALON    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HUP_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HUP_SALON     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HMT_UCI       : int  NA NA NA NA NA NA NA NA NA NA ...
+  [list output truncated]</code></pre>
+</div>
+</div>
+</section>
+<section id="muestra-de-los-datos" class="level5">
+<h5 class="anchored" data-anchor-id="muestra-de-los-datos">Muestra de los datos</h5>
+<p>Con la notación de paréntesis cuadrados (<code>[]</code>), se despliegan las 10 primeras filas (observaciones) y algunas columnas (variables) de interés.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Despliegue de las 10 primeras filas y algunas columnas de interés</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>covid_general[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"FECHA"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">"positivos"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>              <span class="st">"activos"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>              <span class="st">"RECUPERADOS"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>              <span class="st">"nue_posi"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">"nue_falleci"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>              <span class="st">"fallecidos"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>              <span class="st">"salon"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>              <span class="st">"UCI"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        FECHA positivos activos RECUPERADOS nue_posi nue_falleci fallecidos
+1  06/03/2020         2       2           0        2           0          0
+2  07/03/2020         7       7           0        5           0          0
+3  08/03/2020        10      10           0        3           0          0
+4  09/03/2020        12      12           0        2           0          0
+5  10/03/2020        13      13           0        1           0          0
+6  11/03/2020        22      22           0        9           0          0
+7  12/03/2020        23      23           0        1           0          0
+8  13/03/2020        26      26           0        3           0          0
+9  14/03/2020        27      27           0        1           0          0
+10 15/03/2020        35      35           0        8           0          0
+   salon UCI
+1     NA  NA
+2     NA  NA
+3     NA  NA
+4     NA  NA
+5     NA  NA
+6     NA  NA
+7     NA  NA
+8     NA  NA
+9     NA  NA
+10    NA  NA</code></pre>
+</div>
+</div>
+</section>
+<section id="reducción-de-columnas" class="level5">
+<h5 class="anchored" data-anchor-id="reducción-de-columnas">Reducción de columnas</h5>
+<p>Se limita el conjunto de datos a las columnas que son de interés para el análisis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selección de columnas de interés para el análisis</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>covid_general<span class="ot">&lt;-</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  covid_general[, <span class="fu">c</span>(<span class="st">"FECHA"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"positivos"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"activos"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"RECUPERADOS"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"fallecidos"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"nue_posi"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"nue_falleci"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"salon"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"UCI"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="cambio-de-nombres-y-de-tipos-de-datos-de-las-columnas" class="level5">
+<h5 class="anchored" data-anchor-id="cambio-de-nombres-y-de-tipos-de-datos-de-las-columnas">Cambio de nombres y de tipos de datos de las columnas</h5>
+<p>Todos los nombres de las columnas se cambian a minúsculas con la función <a href="https://rdrr.io/r/base/colnames.html">colnames()</a>, para así tener un estilo consistente. Además, el tipo de la columna <code>fecha</code> se convierte de <code>str</code> a <code>Date</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cambio de nombres de las columnas</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(covid_general) <span class="ot">&lt;-</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"fecha"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"positivos"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"activos"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"recuperados"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fallecidos"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nuevos_positivos"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nuevos_fallecidos"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"salon"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"uci"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Conversión de str a Date de la columna fecha</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>covid_general<span class="sc">$</span>fecha <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(covid_general<span class="sc">$</span>fecha, <span class="at">format =</span> <span class="st">"%d/%m/%Y"</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Despliegue de las últimas 10 observaciones</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(covid_general, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         fecha positivos activos recuperados fallecidos nuevos_positivos
+807 2022-05-21    886017   25857      851674       8486             1642
+808 2022-05-22    887425   26549      852387       8489             1408
+809 2022-05-23    888800   26857      853453       8490             1375
+810 2022-05-24    891038   28117      854426       8495             2238
+811 2022-05-25    893213   28566      856148       8499             2175
+812 2022-05-26    896712   31441      856766       8505             3499
+813 2022-05-27    899404   33124      857772       8508             2692
+814 2022-05-28    901542   34163      858862       8517             2138
+815 2022-05-29    903213   34507      860184       8522             1671
+816 2022-05-30    904934   35698      860711       8525             1721
+    nuevos_fallecidos salon uci
+807                 5   283  42
+808                 3   299  46
+809                 1   300  49
+810                 5   301  45
+811                 4   306  44
+812                 6   322  47
+813                 3   328  47
+814                 9   338  44
+815                 5   334  51
+816                 3   333  52</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="datos-cantonales" class="level4">
+<h4 class="anchored" data-anchor-id="datos-cantonales">Datos cantonales</h4>
+<p>Son cuatro archivos con casos positivos, activos, recuperados y fallecidos. Cada archivo tiene una fila para cada uno de los 82 cantones y una fila adicional para “Otros”. Hay una columna por cada día muestreado, con la cantidad de casos del tipo respectivo.</p>
+<section id="carga-de-datos-1" class="level5">
+<h5 class="anchored" data-anchor-id="carga-de-datos-1">Carga de datos</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de casos positivos</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>covid_cantonal_positivos <span class="ot">&lt;-</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read.csv</span>(<span class="st">"datos/05_30_22_CSV_POSITIVOS.csv"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">";"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">fileEncoding =</span> <span class="st">"iso-8859-1"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de casos activos</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>covid_cantonal_activos <span class="ot">&lt;-</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read.csv</span>(<span class="st">"datos/05_30_22_CSV_ACTIVOS.csv"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">";"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">fileEncoding =</span> <span class="st">"iso-8859-1"</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de casos recuperados</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>covid_cantonal_recuperados <span class="ot">&lt;-</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read.csv</span>(<span class="st">"datos/05_30_22_CSV_RECUP.csv"</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">";"</span>,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">fileEncoding =</span> <span class="st">"iso-8859-1"</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de casos fallecidos</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>covid_cantonal_fallecidos <span class="ot">&lt;-</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read.csv</span>(<span class="st">"datos/05_30_22_CSV_FALLECIDOS.csv"</span>,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">";"</span>,</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">fileEncoding =</span> <span class="st">"iso-8859-1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="estructura-del-conjunto-de-datos-1" class="level5">
+<h5 class="anchored" data-anchor-id="estructura-del-conjunto-de-datos-1">Estructura del conjunto de datos</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estructura del dataframe</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(covid_cantonal_positivos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   84 obs. of  811 variables:
+ $ cod_provin : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ provincia  : chr  "San José" "San José" "San José" "San José" ...
+ $ cod_canton : int  112 110 106 118 103 117 102 108 120 115 ...
+ $ canton     : chr  "Acosta" "Alajuelita" "Aserrí" "Curridabat" ...
+ $ X15.03.2020: int  0 0 0 0 4 0 4 0 0 0 ...
+ $ X16.03.2020: int  0 0 0 0 4 0 5 0 0 0 ...
+ $ X17.03.2020: int  0 0 0 1 4 0 5 0 0 0 ...
+ $ X18.03.2020: int  0 0 0 2 4 0 6 1 0 0 ...
+ $ X19.03.2020: int  0 0 0 3 4 0 9 1 0 0 ...
+ $ X20.03.2020: int  0 0 0 5 5 0 11 1 0 2 ...
+ $ X21.03.2020: int  0 0 0 5 4 0 11 0 0 3 ...
+ $ X22.03.2020: int  0 0 1 5 4 0 11 0 0 3 ...
+ $ X23.03.2020: int  0 0 2 5 5 0 11 7 0 3 ...
+ $ X24.03.2020: int  0 0 2 5 5 0 13 7 0 3 ...
+ $ X25.03.2020: int  0 0 2 5 7 0 13 8 0 5 ...
+ $ X26.03.2020: int  0 0 2 5 8 0 13 8 0 5 ...
+ $ X27.03.2020: int  0 0 2 7 12 0 14 9 0 5 ...
+ $ X28.03.2020: int  0 1 2 8 11 0 16 10 0 8 ...
+ $ X29.03.2020: int  0 2 2 8 13 0 17 10 0 8 ...
+ $ X30.03.2020: int  0 2 2 10 13 0 18 10 0 8 ...
+ $ X31.03.2020: int  0 2 2 11 15 0 19 11 0 8 ...
+ $ X01.04.2020: int  0 3 2 12 17 0 18 10 0 9 ...
+ $ X02.04.2020: int  0 3 2 14 18 0 18 11 0 9 ...
+ $ X03.04.2020: int  0 3 3 14 19 0 18 10 0 9 ...
+ $ X04.04.2020: int  0 3 3 14 21 0 18 11 0 9 ...
+ $ X05.04.2020: int  0 4 3 14 21 0 19 11 0 9 ...
+ $ X06.04.2020: int  0 4 3 14 23 0 19 11 0 11 ...
+ $ X07.04.2020: int  0 4 4 15 23 0 19 12 0 12 ...
+ $ X08.04.2020: int  0 6 6 15 27 0 19 13 0 14 ...
+ $ X09.04.2020: int  0 5 5 20 30 0 22 14 0 16 ...
+ $ X10.04.2020: int  0 7 6 20 31 0 23 16 0 16 ...
+ $ X11.04.2020: int  0 8 7 20 34 0 24 16 0 16 ...
+ $ X12.04.2020: int  0 8 8 22 37 0 27 17 0 16 ...
+ $ X13.04.2020: int  0 12 9 22 38 0 27 17 0 16 ...
+ $ X14.04.2020: int  0 12 9 22 39 0 27 18 0 16 ...
+ $ X15.04.2020: int  0 12 10 22 39 0 27 18 0 16 ...
+ $ X16.04.2020: int  0 12 11 22 42 0 27 18 0 16 ...
+ $ X17.04.2020: int  0 12 11 22 44 0 27 18 0 16 ...
+ $ X18.04.2020: int  0 13 11 22 44 0 27 19 0 16 ...
+ $ X19.04.2020: int  0 14 11 22 44 0 27 19 0 16 ...
+ $ X20.04.2020: int  0 14 11 22 44 0 27 19 0 16 ...
+ $ X21.04.2020: int  0 14 11 22 46 0 27 19 0 16 ...
+ $ X22.04.2020: int  0 14 11 22 46 0 29 19 0 16 ...
+ $ X23.04.2020: int  0 14 11 22 47 0 29 20 0 16 ...
+ $ X24.04.2020: int  0 14 11 22 47 0 29 20 0 16 ...
+ $ X25.04.2020: int  0 14 12 22 44 0 29 21 0 16 ...
+ $ X26.04.2020: int  0 14 12 22 45 0 29 21 0 16 ...
+ $ X27.04.2020: int  0 14 12 22 46 0 29 21 0 16 ...
+ $ X28.04.2020: int  0 14 12 22 46 0 29 22 0 16 ...
+ $ X29.04.2020: int  0 14 12 22 46 0 30 22 0 16 ...
+ $ X30.04.2020: int  0 14 12 22 46 0 30 23 0 16 ...
+ $ X01.05.2020: int  0 14 12 22 46 0 30 24 0 16 ...
+ $ X02.05.2020: int  0 14 12 22 46 0 30 24 0 16 ...
+ $ X03.05.2020: int  0 14 12 22 46 0 30 24 0 17 ...
+ $ X04.05.2020: int  0 14 12 22 46 0 30 26 0 17 ...
+ $ X05.05.2020: int  0 14 12 22 46 0 30 27 0 17 ...
+ $ X06.05.2020: int  0 14 12 22 47 0 30 30 0 17 ...
+ $ X07.05.2020: int  0 14 12 23 47 0 30 30 0 17 ...
+ $ X08.05.2020: int  0 14 13 23 48 0 30 30 0 17 ...
+ $ X09.05.2020: int  0 14 13 23 48 0 30 30 0 17 ...
+ $ X10.05.2020: int  0 14 13 24 48 0 30 30 0 17 ...
+ $ X11.05.2020: int  0 14 19 24 48 0 30 30 0 17 ...
+ $ X12.05.2020: int  0 14 19 24 48 0 30 30 0 17 ...
+ $ X13.05.2020: int  0 14 19 24 48 0 30 30 0 17 ...
+ $ X14.05.2020: int  0 14 19 25 48 0 30 30 0 17 ...
+ $ X15.05.2020: int  0 14 19 25 49 0 30 31 0 17 ...
+ $ X16.05.2020: int  0 14 20 25 48 0 30 31 0 17 ...
+ $ X17.05.2020: int  0 14 20 25 48 0 30 32 0 17 ...
+ $ X18.05.2020: int  0 14 20 25 48 0 30 32 0 17 ...
+ $ X19.05.2020: int  0 14 20 25 48 0 30 32 0 17 ...
+ $ X20.05.2020: int  0 14 20 25 48 0 30 32 0 18 ...
+ $ X21.05.2020: int  0 14 20 25 48 0 30 32 0 18 ...
+ $ X22.05.2020: int  0 14 20 25 48 0 30 33 0 18 ...
+ $ X23.05.2020: int  0 15 20 25 48 0 30 33 0 18 ...
+ $ X24.05.2020: int  0 15 20 25 47 0 30 34 0 18 ...
+ $ X25.05.2020: int  0 15 21 25 46 0 30 36 0 18 ...
+ $ X26.05.2020: int  0 15 21 25 46 0 30 37 0 18 ...
+ $ X27.05.2020: int  0 15 22 25 46 0 30 37 0 18 ...
+ $ X28.05.2020: int  0 15 22 25 46 0 30 38 0 18 ...
+ $ X29.05.2020: int  0 16 24 25 46 0 30 38 0 18 ...
+ $ X30.05.2020: int  0 16 24 25 46 0 30 38 0 19 ...
+ $ X31.05.2020: int  0 17 24 25 46 0 30 38 0 19 ...
+ $ X01.06.2020: int  0 17 24 25 46 0 30 38 0 19 ...
+ $ X02.06.2020: int  0 16 24 25 47 0 30 39 0 19 ...
+ $ X03.06.2020: int  0 16 24 25 53 0 30 39 0 19 ...
+ $ X04.06.2020: int  0 16 24 25 54 0 30 39 0 19 ...
+ $ X05.06.2020: int  0 16 24 25 55 0 31 39 0 19 ...
+ $ X06.06.2020: int  0 20 28 26 53 0 31 41 0 19 ...
+ $ X07.06.2020: int  0 19 28 26 53 0 31 43 0 19 ...
+ $ X08.06.2020: int  0 23 28 27 53 0 31 43 0 19 ...
+ $ X09.06.2020: int  0 23 28 28 53 0 31 46 0 19 ...
+ $ X10.06.2020: int  0 26 28 28 55 0 32 47 0 19 ...
+ $ X11.06.2020: int  0 28 28 29 56 0 32 48 0 20 ...
+ $ X12.06.2020: int  0 30 29 29 57 0 34 50 0 20 ...
+ $ X13.06.2020: int  0 33 29 29 57 0 42 50 0 19 ...
+ $ X14.06.2020: int  0 32 29 29 57 0 42 51 0 19 ...
+ $ X15.06.2020: int  0 33 29 29 57 0 42 53 0 19 ...
+ $ X16.06.2020: int  0 47 29 29 58 0 43 54 0 19 ...
+ $ X17.06.2020: int  1 54 29 29 61 0 43 54 0 19 ...
+  [list output truncated]</code></pre>
+</div>
+</div>
+</section>
+<section id="muestra-de-los-datos-1" class="level5">
+<h5 class="anchored" data-anchor-id="muestra-de-los-datos-1">Muestra de los datos</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Despliegue de las 10 primeras filas y algunas columnas de interés</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>covid_cantonal_positivos[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"canton"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"X30.05.2022"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   provincia             canton X30.05.2022
+1   San José             Acosta        4104
+2   San José         Alajuelita       18973
+3   San José             Aserrí       10880
+4   San José         Curridabat       14518
+5   San José       Desamparados       43283
+6   San José               Dota         834
+7   San José             Escazú       15134
+8   San José         Goicoechea       25497
+9   San José León Cortés Castro        1339
+10  San José      Montes de Oca        9987</code></pre>
+</div>
+</div>
+</section>
+<section id="reducción-de-columnas-1" class="level5">
+<h5 class="anchored" data-anchor-id="reducción-de-columnas-1">Reducción de columnas</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selección de columnas de interés para el análisis</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>covid_cantonal_positivos <span class="ot">&lt;-</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_positivos[, <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"canton"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"X30.05.2022"</span>)]</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>covid_cantonal_activos <span class="ot">&lt;-</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_activos[, <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"canton"</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"X30.05.2022"</span>)]</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>covid_cantonal_recuperados <span class="ot">&lt;-</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_recuperados[, <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"canton"</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"X30.05.2022"</span>)]</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>covid_cantonal_fallecidos <span class="ot">&lt;-</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_fallecidos[, <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"canton"</span>,</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"X30.05.2022"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="cambio-de-nombre-de-columnas-y-eliminación-de-filas-innecesarias" class="level5">
+<h5 class="anchored" data-anchor-id="cambio-de-nombre-de-columnas-y-eliminación-de-filas-innecesarias">Cambio de nombre de columnas y eliminación de filas innecesarias</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminación de filas con valores nulos</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>covid_cantonal_positivos <span class="ot">&lt;-</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_positivos[<span class="sc">!</span><span class="fu">is.na</span>(covid_cantonal_positivos<span class="sc">$</span>X30.<span class="fl">05.2022</span>),]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>covid_cantonal_activos <span class="ot">&lt;-</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_activos[<span class="sc">!</span><span class="fu">is.na</span>(covid_cantonal_activos<span class="sc">$</span>X30.<span class="fl">05.2022</span>),]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>covid_cantonal_recuperados <span class="ot">&lt;-</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_recuperados[<span class="sc">!</span><span class="fu">is.na</span>(covid_cantonal_recuperados<span class="sc">$</span>X30.<span class="fl">05.2022</span>),]</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>covid_cantonal_fallecidos <span class="ot">&lt;-</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_fallecidos[<span class="sc">!</span><span class="fu">is.na</span>(covid_cantonal_fallecidos<span class="sc">$</span>X30.<span class="fl">05.2022</span>),]</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminación de fila con canton=="Otros"</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>covid_cantonal_positivos <span class="ot">&lt;-</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_positivos[covid_cantonal_positivos<span class="sc">$</span>canton <span class="sc">!=</span> <span class="st">"Otros"</span>,]</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>covid_cantonal_activos <span class="ot">&lt;-</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_activos[covid_cantonal_activos<span class="sc">$</span>canton <span class="sc">!=</span> <span class="st">"Otros"</span>,]</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>covid_cantonal_recuperados <span class="ot">&lt;-</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_recuperados[covid_cantonal_recuperados<span class="sc">$</span>canton <span class="sc">!=</span> <span class="st">"Otros"</span>,]</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>covid_cantonal_fallecidos <span class="ot">&lt;-</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_fallecidos[covid_cantonal_fallecidos<span class="sc">$</span>canton <span class="sc">!=</span> <span class="st">"Otros"</span>,]</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Cambio de nombre de columnas</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(covid_cantonal_positivos) <span class="ot">&lt;-</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"canton"</span>,</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"positivos"</span>)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(covid_cantonal_activos) <span class="ot">&lt;-</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"canton"</span>,</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"activos"</span>)</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(covid_cantonal_recuperados) <span class="ot">&lt;-</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"canton"</span>,</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"recuperados"</span>)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(covid_cantonal_fallecidos) <span class="ot">&lt;-</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"provincia"</span>,</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"canton"</span>,</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fallecidos"</span>)</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Despliegue de las últimas 10 observaciones</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(covid_cantonal_positivos, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    provincia     canton positivos
+73 Puntarenas        Osa      5527
+74 Puntarenas    Parrita      3397
+75 Puntarenas Puntarenas     28090
+76 Puntarenas     Quepos      7158
+77      Limón    Guácimo      7842
+78      Limón      Limón     16822
+79      Limón     Matina      5822
+80      Limón     Pococí     20449
+81      Limón  Siquirres     10349
+82      Limón  Talamanca      5468</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="pasajeros-del-titanic" class="level3">
+<h3 class="anchored" data-anchor-id="pasajeros-del-titanic">Pasajeros del Titanic</h3>
+<p>Este es el conjunto de datos de entrenamiento de la competencia <a href="https://www.kaggle.com/c/titanic/overview">Titanic - Machine Learning from Disaster</a> organizada por <a href="https://www.kaggle.com/">Kaggle</a>. El archivo también está disponible en <a href="https://github.com/pf3311-cienciadatosgeoespaciales/2021-iii/blob/main/contenido/b/datos/entrenamiento.csv">https://github.com/pf3311-cienciadatosgeoespaciales/2021-iii/blob/main/contenido/b/datos/entrenamiento.csv</a>.</p>
+<section id="carga-de-datos-2" class="level4">
+<h4 class="anchored" data-anchor-id="carga-de-datos-2">Carga de datos</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pasajeros en el conjunto de datos de entrenamiento</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>titanic <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos/pasajeros-titanic-entrenamiento.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="estructura-del-conjunto-de-datos-2" class="level5">
+<h5 class="anchored" data-anchor-id="estructura-del-conjunto-de-datos-2">Estructura del conjunto de datos</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estructura del dataframe</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(titanic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   891 obs. of  12 variables:
+ $ PassengerId: int  1 2 3 4 5 6 7 8 9 10 ...
+ $ Survived   : int  0 1 1 1 0 0 0 0 1 1 ...
+ $ Pclass     : int  3 1 3 1 3 3 1 3 3 2 ...
+ $ Name       : chr  "Braund, Mr. Owen Harris" "Cumings, Mrs. John Bradley (Florence Briggs Thayer)" "Heikkinen, Miss. Laina" "Futrelle, Mrs. Jacques Heath (Lily May Peel)" ...
+ $ Sex        : chr  "male" "female" "female" "female" ...
+ $ Age        : num  22 38 26 35 35 NA 54 2 27 14 ...
+ $ SibSp      : int  1 1 0 1 0 0 0 3 0 1 ...
+ $ Parch      : int  0 0 0 0 0 0 0 1 2 0 ...
+ $ Ticket     : chr  "A/5 21171" "PC 17599" "STON/O2. 3101282" "113803" ...
+ $ Fare       : num  7.25 71.28 7.92 53.1 8.05 ...
+ $ Cabin      : chr  "" "C85" "" "C123" ...
+ $ Embarked   : chr  "S" "C" "S" "S" ...</code></pre>
+</div>
+</div>
+</section>
+<section id="muestra-de-los-datos-2" class="level5">
+<h5 class="anchored" data-anchor-id="muestra-de-los-datos-2">Muestra de los datos</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Despliegue de las 10 primeras filas y algunas columnas de interés</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>titanic[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"Survived"</span>, <span class="st">"Pclass"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span>, <span class="st">"SibSp"</span>, <span class="st">"Parch"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Survived Pclass    Sex Age SibSp Parch
+1         0      3   male  22     1     0
+2         1      1 female  38     1     0
+3         1      3 female  26     0     0
+4         1      1 female  35     1     0
+5         0      3   male  35     0     0
+6         0      3   male  NA     0     0
+7         0      1   male  54     0     0
+8         0      3   male   2     3     1
+9         1      3 female  27     0     2
+10        1      2 female  14     1     0</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="visualizaciones-de-datos" class="level2">
+<h2 class="anchored" data-anchor-id="visualizaciones-de-datos">Visualizaciones de datos</h2>
+<p>Las siguientes visualizaciones se implementan con funciones de graficación del paquete base de R.</p>
+<section id="histogramas" class="level3">
+<h3 class="anchored" data-anchor-id="histogramas">Histogramas</h3>
+<p>Un <a href="https://es.wikipedia.org/wiki/Histograma">histograma</a> es una representación gráfica de la distribución de una variable numérica en forma de barras (llamadas en inglés <em>bins</em>). La longitud de cada barra representa la frecuencia de un rango de valores de la variable. La graficación de la distribución de las variables es, frecuentemente, una de las primeras tareas que se realiza cuando se explora un conjunto de datos.</p>
+<p>En el paquete base de R, los histogramas se crean la función <a href="https://rdrr.io/r/graphics/hist.html">hist()</a>.</p>
+<p>El siguiente histograma muestra la distribución de la variable correspondiente a los casos de COVID positivos en los cantones de Costa Rica.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograma de casos positivos en cantones</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  covid_cantonal_positivos<span class="sc">$</span>positivos,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="dv">8</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"blue"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Distribución de casos positivos de COVID en cantones al 2022-05-30"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Casos"</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Frecuencia"</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/histograma-covid-cantonal-positivos-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>La función <a href="https://rdrr.io/r/stats/density.html">density()</a> permite crear una estimación de densidad del kernel (<em>Kernel Density Estimation</em>, KDE), una curva que muestra la densidad de los datos.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograma de casos positivos en cantones</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> covid_cantonal_positivos<span class="sc">$</span>positivos,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="dv">8</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"blue"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">prob =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Distribución de casos positivos de COVID en cantones al 2022-05-30"</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Casos"</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Densidad"</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Curva de densidad</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(covid_cantonal_positivos<span class="sc">$</span>positivos), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/histograma-density-covid-cantonal-positivos-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="ejercicios" class="level4">
+<h4 class="anchored" data-anchor-id="ejercicios">Ejercicios</h4>
+<ol type="1">
+<li>Construya un histograma que muestre la distribución de la edad de los pasajeros del Titanic. Incluya una curva de densidad.</li>
+<li>Construya un histograma que muestre la distribución de la cantidad de padres e hijos que viajaban con los pasajeros del Titanic. Incluya una curva de densidad.</li>
+<li>Construya un histograma que muestre la distribución de la cantidad de hermanos y cónyugues que viajaban con los pasajeros del Titanic. Incluya una curva de densidad.</li>
+</ol>
+</section>
+</section>
+<section id="gráficos-de-caja" class="level3">
+<h3 class="anchored" data-anchor-id="gráficos-de-caja">Gráficos de caja</h3>
+<p>Un <a href="https://es.wikipedia.org/wiki/Diagrama_de_caja">gráfico de caja (<em>boxplot</em>)</a> muestra información de una variable numérica a través de su <a href="https://es.wikipedia.org/wiki/Mediana">mediana</a>, sus <a href="https://es.wikipedia.org/wiki/Cuartiles">cuartiles</a> (Q1, Q2 y Q3) y sus <a href="https://es.wikipedia.org/wiki/Valor_at%C3%ADpico">valores atípicos</a>.</p>
+<p>En el paquete base de R, los gráficos de caja se crean la función <a href="https://rdrr.io/r/graphics/boxplot.html">boxplot()</a>.</p>
+<p>El siguiente gráfico de caja muestra la distribución de la variable correspondiente a los casos de COVID fallecidos en los cantones de Costa Rica.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de caja</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> covid_cantonal_fallecidos<span class="sc">$</span>fallecidos,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Distribución de casos fallecidos de COVID en cantones al 2022-05-30"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Casos"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-caja-covid-cantonal-fallecidos-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>La distribución de la misma variable se muestra en el siguiente gráfico, pero agrupada por provincias.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de caja</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  fallecidos <span class="sc">~</span> provincia,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> covid_cantonal_fallecidos,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Distribución de casos fallecidos de COVID en provincias al 2022-05-30"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Casos"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">0.75</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-caja-covid-cantonal-fallecidos-provincias-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="ejercicios-1" class="level4">
+<h4 class="anchored" data-anchor-id="ejercicios-1">Ejercicios</h4>
+<ol type="1">
+<li>Construya un gráfico de caja de la edad de los pasajeros del Titanic.</li>
+<li>Agregue la distribución de la variable de sobrevivencia al gráfico del ejercicio anterior.</li>
+<li>Construya un gráfico de caja de la cantidad de padres e hijos que viajaban con los pasajeros del Titanic.</li>
+<li>Agregue la distribución de la variable de sobrevivencia al gráfico del ejercicio anterior.</li>
+<li>Construya un gráfico de caja de la cantidad de hermanos y cónyugues que viajaban con los pasajeros del Titanic.</li>
+<li>Agregue la distribución de la variable de sobrevivencia al gráfico del ejercicio anterior.</li>
+</ol>
+</section>
+</section>
+<section id="gráficos-de-barras" class="level3">
+<h3 class="anchored" data-anchor-id="gráficos-de-barras">Gráficos de barras</h3>
+<p>Un <a href="https://es.wikipedia.org/wiki/Diagrama_de_barras">gráfico de barras</a> se compone de barras rectangulares con longitud proporcional a estadísticas (ej. frecuencias, promedios, mínimos, máximos) asociadas a una variable categórica o discreta. Las barras pueden ser horizontales o verticales y se recomienda que estén ordenadas según su longitud, a menos que exista un orden inherente a la variable (ej. el orden de los días de la semana).</p>
+<p>El paquete base de R implementa gráficos de barras con la función <a href="https://rdrr.io/r/graphics/barplot.html">barplot()</a>.</p>
+<p>Los siguientes gráficos de barras muestran la cantidad diaria de nuevos casos positivos y nuevos casos fallecidos.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de barras</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">height=</span>covid_general<span class="sc">$</span>nuevos_positivos,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">names.arg=</span><span class="fu">format</span>(covid_general<span class="sc">$</span>fecha, <span class="st">"%Y"</span>),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span>, </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> <span class="dv">0</span>, </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt =</span> <span class="st">"n"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">space =</span> <span class="dv">1</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main=</span><span class="st">"Casos positivos por día"</span>,</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Fecha"</span>,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Casos positivos"</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Fechas minima y máxima</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>x_min <span class="ot">&lt;-</span> <span class="fu">min</span>(covid_general<span class="sc">$</span>fecha)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>x_max <span class="ot">&lt;-</span> <span class="fu">max</span>(covid_general<span class="sc">$</span>fecha)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Formato del eje X</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">1</span>,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">match</span>(<span class="fu">seq</span>(<span class="fu">as.Date</span>(x_min), x_max, <span class="st">"years"</span>), covid_general<span class="sc">$</span>fecha) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span>),</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">format</span>(<span class="fu">seq</span>(<span class="fu">as.Date</span>(x_min), x_max, <span class="st">"years"</span>), <span class="st">"%Y"</span>),</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-barras-positivos-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de barras</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">height=</span>covid_general<span class="sc">$</span>nuevos_fallecidos,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">names.arg=</span><span class="fu">format</span>(covid_general<span class="sc">$</span>fecha, <span class="st">"%Y"</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span>, </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> <span class="dv">0</span>, </span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt =</span> <span class="st">"n"</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">space =</span> <span class="dv">1</span>,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">main=</span><span class="st">"Casos fallecidos por día"</span>,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Fecha"</span>,</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Casos fallecidos"</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Fechas minima y máxima</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>x_min <span class="ot">&lt;-</span> <span class="fu">min</span>(covid_general<span class="sc">$</span>fecha)</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>x_max <span class="ot">&lt;-</span> <span class="fu">max</span>(covid_general<span class="sc">$</span>fecha)</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Formato del eje X</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">1</span>,</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">match</span>(<span class="fu">seq</span>(<span class="fu">as.Date</span>(x_min), x_max, <span class="st">"years"</span>), covid_general<span class="sc">$</span>fecha) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span>),</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">format</span>(<span class="fu">seq</span>(<span class="fu">as.Date</span>(x_min), x_max, <span class="st">"years"</span>), <span class="st">"%Y"</span>),</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-barras-fallecidos-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>El siguiente gráfico muestra la cantidad de casos positivos agrupados por provincia.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Agrupación de casos por provincia</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>positivos_cantones_x_provincia <span class="ot">&lt;-</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aggregate</span>(<span class="at">data =</span> covid_cantonal_positivos,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>            positivos <span class="sc">~</span> provincia,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">FUN =</span> sum,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenamiento</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>positivos_cantones_x_provincia <span class="ot">&lt;-</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  positivos_cantones_x_provincia[<span class="fu">order</span>(<span class="sc">-</span>positivos_cantones_x_provincia<span class="sc">$</span>positivos),]</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de barras</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> positivos_cantones_x_provincia<span class="sc">$</span>positivos,</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">names.arg =</span> positivos_cantones_x_provincia<span class="sc">$</span>provincia,</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Casos positivos por provincia"</span>,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Provincia"</span>,</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Casos positivos"</span>,</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">0.5</span>, </span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"blue"</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-barras-covid-positivos-cantones-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="ejercicios-2" class="level4">
+<h4 class="anchored" data-anchor-id="ejercicios-2">Ejercicios</h4>
+<ol type="1">
+<li>Construya un gráfico de barras que muestre la cantidad de pasajeros del Titanic por sexo.</li>
+<li>Construya un gráfico de barras que muestre la cantidad de pasajeros del Titanic por clase.</li>
+<li>Construya un gráfico de barras que muestre la cantidad de pasajeros del Titanic que sobrevivieron y que fallecieron.</li>
+</ol>
+</section>
+</section>
+<section id="gráficos-de-dispersión" class="level3">
+<h3 class="anchored" data-anchor-id="gráficos-de-dispersión">Gráficos de dispersión</h3>
+<p>Un <a href="https://es.wikipedia.org/wiki/Diagrama_de_dispersi%C3%B3n">gráfico de dispersión (<em>scatterplot</em>)</a> despliega los valores de dos variables numéricas, como puntos en un sistema de coordenadas. El valor de una variable se despliega en el eje X y el de la otra variable en el eje Y. Variables adicionales pueden ser mostradas mediante atributos de los puntos, tales como su tamaño, color o forma.</p>
+<p>El paquete base de R implementa gráficos de dispersión por medio de la función <a href="https://rdrr.io/r/base/plot.html">plot()</a>.</p>
+<p>Seguidamente, se utiliza un gráfico de dispersión para mostrar las cantidades diarias de pacientes hospitalizados en salón y de pacientes hospitalizados en unidades de cuidados intensivos (UCI) por causa del COVID.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de dispersión</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> covid_general<span class="sc">$</span>salon,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> covid_general<span class="sc">$</span>uci,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">16</span>,  <span class="co"># https://www.r-bloggers.com/2021/06/r-plot-pch-symbols-different-point-shapes-in-r/</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">factor</span>(<span class="fu">format</span>(covid_general<span class="sc">$</span>fecha, <span class="st">"%Y"</span>)),  <span class="co"># color de los puntos con base en el año</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Pacientes en salón vs pacientes en UCI al 2020-05-30"</span>,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Pacientes hospitalizados en salón"</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Pacientes hospitalizados en UCI"</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Leyenda</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="st">"topleft"</span>,</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">inset =</span> <span class="fl">0.03</span>,</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">levels</span>(<span class="fu">factor</span>(<span class="fu">format</span>(covid_general<span class="sc">$</span>fecha, <span class="st">"%Y"</span>))),</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">seq_along</span>(<span class="fu">factor</span>(<span class="fu">format</span>(covid_general<span class="sc">$</span>fecha, <span class="st">"%Y"</span>)))</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-dispersion-salon-uci-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="ejercicios-3" class="level4">
+<h4 class="anchored" data-anchor-id="ejercicios-3">Ejercicios</h4>
+<ol type="1">
+<li>En un gráfico de dispersión, muestre las variables de casos positivos y casos fallecidos de COVID, del conjunto de datos generales.</li>
+</ol>
+</section>
+</section>
+<section id="gráficos-de-líneas" class="level3">
+<h3 class="anchored" data-anchor-id="gráficos-de-líneas">Gráficos de líneas</h3>
+<p>Un <a href="https://en.wikipedia.org/wiki/Line_chart">gráfico de líneas</a> muestra información en la forma de puntos de datos, llamados marcadores (<em>markers</em>), conectados por segmentos de líneas rectas. Es similar a un gráfico de dispersión pero, además de los segmentos de línea, tiene la particularidad de que los datos están ordenados, usualmente con respecto al eje X. Los gráficos de línea son usados frecuentemente para mostrar tendencias a través del tiempo.</p>
+<p>El paquete base de R implementa gráficos de dispersión por medio de la función <code>plot()</code> y su argumento <code>type=l</code>.</p>
+<p>El siguiente gráfico de líneas muestra la cantidad de casos positivos de COVID acumulados a través del tiempo.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de líneas</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  covid_general<span class="sc">$</span>fecha,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  covid_general<span class="sc">$</span>positivos,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"l"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt =</span> <span class="st">"n"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">yaxt =</span> <span class="st">"n"</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Casos positivos acumulados de COVID en Costa Rica al 2020-05-30"</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Fecha"</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Casos positivos"</span>,</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"blue"</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Formato del eje X</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>     covid_general<span class="sc">$</span>fecha,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">tick =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>     <span class="fu">format</span>(covid_general<span class="sc">$</span>fecha, <span class="st">"%m-%y"</span>),</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.axis =</span> .<span class="dv">7</span>)</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Formato del eje Y</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">2</span>,</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>  covid_general<span class="sc">$</span>positivos,</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="cn">TRUE</span>,  </span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1000000</span>, <span class="at">by =</span> <span class="dv">200000</span>),</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> .<span class="dv">7</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-lineas-positivos-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En el siguiente caso, se presenta un gráfico de líneas para múltiples variables: casos positivos, activos, recuperados y fallecidos.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de líneas de casos positivos</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  covid_general<span class="sc">$</span>fecha,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  covid_general<span class="sc">$</span>positivos,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"l"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt =</span> <span class="st">"n"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">yaxt =</span> <span class="st">"n"</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Casos acumulados de COVID en Costa Rica"</span>,</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Fecha"</span>,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Casos"</span>,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"blue"</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Casos activos</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(covid_general<span class="sc">$</span>fecha, covid_general<span class="sc">$</span>activos, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Casos recuperados</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(covid_general<span class="sc">$</span>fecha, covid_general<span class="sc">$</span>recuperados, <span class="at">col=</span><span class="st">"green"</span>)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Casos fallecidos</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(covid_general<span class="sc">$</span>fecha, covid_general<span class="sc">$</span>fallecidos, <span class="at">col=</span><span class="st">"black"</span>)</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Leyenda</span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="st">"topleft"</span>,</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">inset =</span> <span class="fl">0.03</span>,</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Positivos"</span>, <span class="st">"Activos"</span>, <span class="st">"Recuperados"</span>, <span class="st">"Fallecidos"</span>),</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"black"</span>),</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.7</span>)</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Formato del eje X</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>,</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>     covid_general<span class="sc">$</span>fecha,</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>     <span class="at">tick =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>     <span class="fu">format</span>(covid_general<span class="sc">$</span>fecha, <span class="st">"%m-%y"</span>),</span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.axis =</span> .<span class="dv">7</span>)</span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Formato del eje Y</span></span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">2</span>,</span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>  covid_general<span class="sc">$</span>positivos,</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="cn">TRUE</span>,  </span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1000000</span>, <span class="at">by =</span> <span class="dv">200000</span>),</span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> .<span class="dv">7</span></span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/grafico-lineas-positivos-activos-recuperados-fallecidos-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="ejercicios-4" class="level4">
+<h4 class="anchored" data-anchor-id="ejercicios-4">Ejercicios</h4>
+<ol type="1">
+<li>En un gráfico de líneas, muestre las variables de casos positivos de hombres y de casos positivos de mujeres, del conjunto de datos generales de COVID.</li>
+</ol>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
